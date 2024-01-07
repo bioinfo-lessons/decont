@@ -16,3 +16,54 @@
 #   CCAGGATTTACAGACTTTAAA
 #
 #   If $4 == "another" only the **first two sequence** should be output
+
+
+
+# Verificar si se proporcionaron los argumentos esperados
+if [ "$#" -lt 2 ]; then
+    echo "Uso: $0 <url_del_archivo> <directorio_destino> [si/descomprimir] [palabra_a_filtrar]"
+    exit 1
+fi
+
+# Argumentos
+file_url="$1"
+final_directory="$2"
+tounzip="$3"
+two_sequences="$4"
+
+mkdir -p "$final_directory" # Crear directorio de destino en el caso de que este no exista
+
+wget -P "$final_directory" "$file_url"
+
+file_name_unzip=$(echo "$file_url" | sed 's/\.gz$//')
+file_name=$(basename "$file_url")
+
+
+# Descomprimir si se especifica
+if [ "$tounzip" == "yes" ]; then
+    # Obtener el nombre del archivo sin la extensión .gz
+    file_name_unzip="${final_directory}/$(basename "$file_url" .gz)"
+
+    # Descomprimir el archivo
+    gzip -dk "$final_directory/$(basename "$file_url")"
+
+
+fi
+
+
+if [ -n "$two_sequences" ]; then
+	if [ "$two_sequences" == "another" ]; then
+		# Crear directorio de salida si no existe
+		mkdir -p "${final_directory}_2seq"
+		if [[ "$file_name_unzip" == *.fasta ]]; then
+            		# Procesar archivos FASTA
+            		awk '/^>/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq"
+        	elif [[ "$file_name_unzip" == *.fastq ]]; then
+            		# Procesar archivos FASTQ
+            		awk '/^@/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq"
+        	else
+           		 echo "Formato de archivo no reconocido: $file_name_unzip"
+        	fi
+          	
+	fi
+fi
