@@ -5,6 +5,7 @@
 3. In the cleanup.sh script.
     * I firstly create a if loop to check if the input are 4 or none. With this conditions the code have to do the same: delete all created files except the urls.txt in the data folder and the contamintans_url.txt in the res folder.
     * Then if the conditions of the if loop are not achieve, I save all of the inputs in a variable and for each of the names that could be as input, if them are the same in the inputs list, then we have to delete all files of the folder except, as in the case of all fles have to be deleted, we have to keep data/urls.txt and res/contaminants_url.txt
+4. In the bonus exercise of **Replace the loop that downloads the sample data files with a wget one-liner** I tried to change the loop by `wget -P data -i data/urls.txt` and it shows me an error that I don't understand. I sent you a screenshot of the error in gmail. Now the script that I have upload does't have the part of this line exercise.
 
 
 
