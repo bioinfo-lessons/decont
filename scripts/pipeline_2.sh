@@ -37,7 +37,7 @@ do
 	bash scripts/md5script.sh $url
 done
 
-rm -R data/md5script.sh
+rm -R data/md5_files
 
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
