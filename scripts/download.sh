@@ -57,10 +57,10 @@ if [ -n "$two_sequences" ]; then
 		mkdir -p "${final_directory}_2seq"
 		if [[ "$file_name_unzip" == *.fasta ]]; then
             		# Procesar archivos FASTA
-            		awk '/^>/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq"
+            		awk '/^>/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq.fasta"
         	elif [[ "$file_name_unzip" == *.fastq ]]; then
             		# Procesar archivos FASTQ
-            		awk '/^@/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq"
+            		awk '/^@/ {++seq; if (seq > 2) exit} 1' "${file_name_unzip}" > "${final_directory}_2seq/$(basename "$file_name_unzip")_2seq.fastq"
         	else
            		 echo "Formato de archivo no reconocido: $file_name_unzip"
         	fi
