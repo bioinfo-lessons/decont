@@ -1,3 +1,9 @@
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+	echo "Usage : $0 <list_of_urls> <contaminants_url>"
+	exit 1
+fi
 
 list_of_urls=$(cat $1)
 contaminants_url=$(cat $2)
@@ -26,7 +32,12 @@ else
     done
 fi
 
+for url in $list_of_urls
+do
+	bash scripts/md5script.sh $url
+done
 
+rm -R data/md5script.sh
 
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
@@ -98,7 +109,7 @@ do
         --outReadsUnmapped Fastx --readFilesIn out/trimmed/"$sid".trimmed.fastq.gz \
        --readFilesCommand gunzip -c --outFileNamePrefix "out/star/$sid/"
     echo "$sid" >> "$log_file"
-    cat out/star/"$sid"/Log.out >> "$lof_file"
+    cat out/star/"$sid"/Log.out >> "$log_file"
 done 
 
 echo "Alignment finished" >> "$log_file"
