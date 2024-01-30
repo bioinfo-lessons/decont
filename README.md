@@ -2,7 +2,7 @@
 
 1. I have created a file for the contaminants url just to be able to change the url in case of it changes or we want to download another file.
 
-   1.1. The pipeline with the improvments of the bonus exercises are in the script `pipeline_2.sh`
+   1.1. **The pipeline with the improvments of the bonus exercises are in the script `pipeline_2.sh`**
    
 3. I have also changed the names of the urls files and I added extensions to this files. I know this don't change anything of the program.
 4. In the `cleanup.sh` script.
