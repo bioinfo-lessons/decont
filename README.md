@@ -1,13 +1,15 @@
 #### **Some details of my work**
 
 1. I have created a file for the contaminants url just to be able to change the url in case of it changes or we want to download another file.
-1.1. The pipeline with the improvments of the bonus exercises are in the script `pipeline_2.sh`
-2. I have also changed the names of the urls files and I added extensions to this files. I know this don't change anything of the program.
-3. In the `cleanup.sh` script.
+
+   1.1. The pipeline with the improvments of the bonus exercises are in the script `pipeline_2.sh`
+   
+3. I have also changed the names of the urls files and I added extensions to this files. I know this don't change anything of the program.
+4. In the `cleanup.sh` script.
     * I firstly create a if loop to check if the input are 4 or none. With this conditions the code have to do the same: delete all created files except the urls.txt in the data folder and the `contamintans_url.txt` in the res folder.
     * Then if the conditions of the if loop are not achieve, I save all of the inputs in a variable and for each of the names that could be as input, if them are the same in the inputs list, then we have to delete all files of the folder except, as in the case of all fles have to be deleted, we have to keep `data/urls.txt` and `res/contaminants_url.txt`.
-4. In the scripts folder, there are two scripts, the differences of those two scrips is that one is with the download loop (`pipeline.sh`) and the second one is with one-liner `wget` (`pipeline_2.sh`). This is due to the scipt of the loops works correctly, and I created the second one to try to do the one-liner `wget`. Once it work I upload both.
-5. The `md5script.sh` compares both md5 of the local file and the md5 of the remote one. I was not able to do this part without downloading the md5 of the URL. So I download the md5 of the URL and compare that one with the downloaded file one.
+5. In the scripts folder, there are two scripts, the differences of those two scrips is that one is with the download loop (`pipeline.sh`) and the second one is with one-liner `wget` (`pipeline_2.sh`). This is due to the scipt of the loops works correctly, and I created the second one to try to do the one-liner `wget`. Once it work I upload both.
+6. The `md5script.sh` compares both md5 of the local file and the md5 of the remote one. I was not able to do this part without downloading the md5 of the URL. So I download the md5 of the URL and compare that one with the downloaded file one.
 
 
 
