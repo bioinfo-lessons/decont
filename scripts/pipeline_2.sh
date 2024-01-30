@@ -42,13 +42,16 @@ rm -R data/md5_files
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
 
-bash scripts/download.sh $contaminants_url res yes
+bash scripts/download.sh $contaminants_url res
 
+zcat res/contaminants.fasta.gz | seqkit grep -v -n -r -p '.*small nuclear.*' > res/contaminants.fasta
+ 
 
-archivo="res/contaminants.fasta"
-contenido_filtrado=$(grep -v "small nuclear" $archivo)
-echo "$contenido_filtrado" > res/contaminants.fasta
-gzip -fk res/contaminants.fasta
+# -v: Seleccionar las secuencias que no coinciden con el patrón
+# -r: El patrón es una expresión regular
+# -p: Patrón a buscar
+# -i: Insensible a mayúsculas y minúsculas
+
 
 # Create the log file
 log_file="log/pipeline.log"
