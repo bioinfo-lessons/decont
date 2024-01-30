@@ -1,6 +1,7 @@
 #### **Some details of my work**
 
 1. I have created a file for the contaminants url just to be able to change the url in case of it changes or we want to download another file.
+1.1. The pipeline with the improvments of the bonus exercises are in the script `pipeline_2.sh`
 2. I have also changed the names of the urls files and I added extensions to this files. I know this don't change anything of the program.
 3. In the `cleanup.sh` script.
     * I firstly create a if loop to check if the input are 4 or none. With this conditions the code have to do the same: delete all created files except the urls.txt in the data folder and the `contamintans_url.txt` in the res folder.
