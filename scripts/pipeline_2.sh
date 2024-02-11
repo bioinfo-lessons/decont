@@ -1,24 +1,57 @@
+#!/bin/bash
+
+if [ "$#" -ne 2 ]; then
+	echo "Usage : $0 <list_of_urls> <contaminants_url>"
+	exit 1
+fi
 
 list_of_urls=$(cat $1)
 contaminants_url=$(cat $2)
 
 #Download all the files specified in data/filenames
 
-for url in $list_of_urls #TODO
+#for url in $list_of_urls #TODO
+#do
+#         bash scripts/download.sh $url data
+#done
+
+carpeta="data"
+archivos=$(find "$carpeta" -type f -name "*.fastq.gz")
+
+if [ -z "$archivos" ]; then
+    wget -P data -i data/urls.txt
+else
+    for url in $list_of_urls; do
+        archivo_base=$(basename "$url")
+        
+        if echo "$archivos" | grep -q "$archivo_base"; then
+            echo -e "WARNING: $archivo_base is already downloaded\n"
+        else
+            wget -P data "$url"
+        fi
+    done
+fi
+
+for url in $list_of_urls
 do
-         bash scripts/download.sh $url data
+	bash scripts/md5script.sh $url
 done
+
+rm -R data/md5_files
 
 # Download the contaminants fasta file, uncompress it, and
 # filter to remove all small nuclear RNAs
 
-bash scripts/download.sh $contaminants_url res yes
+bash scripts/download.sh $contaminants_url res
 
+zcat res/contaminants.fasta.gz | seqkit grep -v -n -r -p '.*small nuclear.*' > res/contaminants.fasta
+ 
 
-archivo="res/contaminants.fasta"
-contenido_filtrado=$(grep -v "small nuclear" $archivo)
-echo "$contenido_filtrado" > res/contaminants.fasta
-gzip -fk res/contaminants.fasta
+# -v: Seleccionar las secuencias que no coinciden con el patrón
+# -r: El patrón es una expresión regular
+# -p: Patrón a buscar
+# -i: Insensible a mayúsculas y minúsculas
+
 
 # Create the log file
 log_file="log/pipeline.log"
@@ -56,9 +89,12 @@ for sid in $list_of_sample_ids
 do
 	 cutadapt -m 18 -a TGGAATTCTCGGGTGCCAAGG --discard-untrimmed \
 	 -o out/trimmed/"$sid".trimmed.fastq.gz out/merged/"$sid".fastq.gz \
-	> log/cutadapt/"$sid".log >> "$log_file" 2>&1
-
+	> log/cutadapt/"$sid".log
+	echo "$sid" >> "$log_file"
+	cat log/cutadapt/"$sid".log >> "$log_file"
 done
+
+
 
 echo "Trimmed finished" >> "$log_file"
 echo "Starting alignment..." >> "$log_file"
@@ -74,8 +110,9 @@ do
     mkdir -p out/star/$sid
     STAR --runThreadN 4 --genomeDir res/contaminants_idx \
         --outReadsUnmapped Fastx --readFilesIn out/trimmed/"$sid".trimmed.fastq.gz \
-       --readFilesCommand gunzip -c --outFileNamePrefix "out/star/$sid/" >> "$log_file" 2>&1
-    
+       --readFilesCommand gunzip -c --outFileNamePrefix "out/star/$sid/"
+    echo "$sid" >> "$log_file"
+    cat out/star/"$sid"/Log.out >> "$log_file"
 done 
 
 echo "Alignment finished" >> "$log_file"
